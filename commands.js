@@ -2,6 +2,10 @@ import 'dotenv/config';
 import { getRPSChoices } from './game.js';
 import { capitalize, InstallGlobalCommands } from './utils.js';
 
+//firestoreを使用するためのインポート
+const { Firestore } = require("@google-cloud/firestore");
+
+
 // Get the game choices from game.js
 function createCommandChoices() {
   const choices = getRPSChoices();
@@ -16,7 +20,6 @@ function createCommandChoices() {
 
   return commandChoices;
 }
-
 
 
 // Simple test command

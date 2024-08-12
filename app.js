@@ -7,16 +7,27 @@ import {
 } from 'discord-interactions';
 import { getRandomEmoji } from './utils.js';
 
+// Firebase SDKのインポート
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
+import config from './config.json';
+
 // Create an express app
-const app = express();
+const expressApp = express();
 // Get port, or default to 3000
 const PORT = process.env.PORT || 3000;
+
+// Firebaseの初期化
+const firebaseApp = initializeApp(config.firebase);
+const analytics = getAnalytics(firebaseApp);
+const db = getFirestore(firebaseApp);
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  * Parse request body and verifies incoming requests using discord-interactions package
  */
-app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async function (req, res) {
+expressApp.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async function (req, res) {
   // Interaction type and data
   const { type, data } = req.body;
 
@@ -54,6 +65,6 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
   return res.status(400).json({ error: 'unknown interaction type' });
 });
 
-app.listen(PORT, () => {
+expressApp.listen(PORT, () => {
   console.log('Listening on port', PORT);
 });

@@ -1,6 +1,74 @@
 #FROM SHINOZAKI
 これはshinozakiのアカウントのBOTを使っています。
+
+ソースコードはgithubに置きます。
+firebaseはstripeやdiscordでやり取りしたデータを保存しておきます。
+
+
+#hostingURL deployしたら得ました
+https://wayofthings202408.web.app/
+#firebase console
+https://console.firebase.google.com/project/wayofthings202408/overview
+
+git@github.com:Microhorse/wayofthings.git
+
+これでサーバーに招待できます
 https://discord.com/api/oauth2/authorize?client_id=1268259641226301522&permissions=8&scope=bot%20applications.commands
+
+
+
+///////////////////////////////////////////////////////////
+#1.firebaseデータベースへデータを読み込む
+https://www.cloudskillsboost.google/focuses/8392?locale=ja&parent=catalog
+cloudコンソール内のfirestoreデータベースを作成しそこにソースをアップロードします。
+
+##1-1.gitにローカルフォルダをリンクする 
+その前にgit情報を設定する↓　sshキー設定とかもある。AIに聞いてみて
+https://genesis-tech.jp/blog/check-register-username-mail/
+push方法など。
+https://zenn.dev/toshihide2000/articles/d0c99f96e2706a
+
+
+#2.firebaseにを使用してサーバーレスウェブアプリ
+https://www.cloudskillsboost.google/focuses/8391?locale=ja&parent=catalog
+
+
+
+
+
+
+■Firestoreとstripeの連携 - StripeUser モデルの作成
+```
+export const StripeUserCN = 'StripeUser'
+export type StripeUser = {
+  id?: string
+  customerId: string | null
+  username: string
+  email: string
+  isActivated: boolean
+  expirationDate: Timestamp | FieldValue | null
+  createdAt?: Timestamp | FieldValue
+  updatedAt?: Timestamp | FieldValue
+```ts
+
+■サブスク購入時に webhookを受信して、StripeUser を作成する
+createdAt:
+customerId:
+email:
+expirationDate:
+isActivated:
+updatedAt:
+username:
+をフィールドに
+
+■ボタンアクションからprivateチャンネルを作成し、支払いリンクを投稿
+URLパラメータにclient_reference_idを追加してDiscordとstripeの情報を照合
+
+
+
+
+
+
 
 # Getting Started app for Discord
 

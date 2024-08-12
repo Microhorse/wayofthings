@@ -1,0 +1,50 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 管理者リストの取得
+    function getAdminList() {
+      return get(/databases/$(database)/documents/admin_settings/admin_list).data.admins;
+    }
+
+    // 管理者チェック
+    function isAdmin() {
+      return request.auth.token.email in getAdminList();
+    }
+
+    // ボットのサービスアカウント
+    function isBotServiceAccount() {
+      return request.auth.token.email == 'shinozaki.y.1015@gmail.com';
+    }
+
+    // 管理者設定
+    match /admin_settings/admin_list {
+      allow read: if isAdmin() || isBotServiceAccount();
+      allow write: if isAdmin();
+    }
+
+    // StripeUser コレクション
+    match /StripeUser/{userId} {
+      allow read: if request.auth.uid == userId || isAdmin() || isBotServiceAccount();
+      allow create, update: if isAdmin() || isBotServiceAccount();
+      allow delete: if isAdmin();
+    }
+
+    // サーバー設定コレクション
+    match /servers/{serverId} {
+      allow read: if isAdmin() || isBotServiceAccount();
+      allow write: if isAdmin() || isBotServiceAccount();
+    }
+
+    // ボット設定コレクション
+    match /bot_settings/{document=**} {
+      allow read: if isAdmin() || isBotServiceAccount();
+      allow write: if isAdmin();
+    }
+
+    // その他のコレクション（将来的な拡張用）
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+  }
+}
